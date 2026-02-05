@@ -3,8 +3,33 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Sparkles, Download } from 'lucide-react';
+import { ArrowLeft, Save, Sparkles, Download, Plus } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
+
+// --- VOORGEDEFINIEERDE SUGGESTIES ---
+const SUGGESTIONS = {
+  quickFix: [
+    "Gebruik voorgesneden groente uit zak",
+    "Koop kant-en-klare saus",
+    "Gebruik vleesvervangers (hoeven niet gaar)",
+    "Sla de bijgerechten over",
+    "Gebruik de snelkookpan"
+  ],
+  babyCrying: [
+    "Zet vuur uit, deksel erop (blijft 20 min warm)",
+    "Zet oven op 60 graden (warmhoudstand)",
+    "Draagzak om en doorgaan",
+    "Partner roept: 'Ik neem het over!'",
+    "Zet tv aan voor de oudste"
+  ],
+  dishwashing: [
+    "Alles in één pan (One-pot)",
+    "Gebruik bakpapier op de bakplaat",
+    "Eet met je handen (wraps/pita)",
+    "Gebruik de staafmixer in de pan",
+    "Eet direct uit de pan"
+  ]
+};
 
 export default function AddRecipePage() {
   const router = useRouter();
@@ -28,6 +53,11 @@ export default function AddRecipePage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Helper om een suggestie in het veld te zetten
+  const applySuggestion = (field: string, text: string) => {
+    setFormData(prev => ({ ...prev, [field]: text }));
   };
 
   // --- SCRAPER FUNCTIE ---
@@ -106,12 +136,37 @@ export default function AddRecipePage() {
     }
   };
 
-  // --- STYLING CONSTANTS (PURE SLATE) ---
-  // Alles is Slate. Slate-900 voor tekst, Slate-300 voor randen.
+  // --- STYLING CONSTANTS ---
   const inputClass = "w-full p-3 bg-white rounded-lg border border-slate-300 text-slate-900 font-medium placeholder:text-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800 outline-none transition-colors";
-  
-  // Labels: Donkergrijs/Zwart
   const labelClass = "block text-xs font-bold text-slate-700 uppercase mb-1 tracking-wide";
+  const chipClass = "inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-300 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:border-slate-400 hover:text-slate-900 cursor-pointer transition-all";
+
+  // Helper component voor de Tip velden
+  const renderTipField = (label: string, name: 'tipQuickFix' | 'tipBabyCrying' | 'tipDishwashing', placeholder: string, suggestions: string[]) => (
+    <div>
+      <label className="block text-xs font-bold text-slate-800 uppercase mb-1">{label}</label>
+      <input 
+        name={name} 
+        value={formData[name]} 
+        onChange={handleChange} 
+        className={inputClass} 
+        placeholder={placeholder} 
+      />
+      {/* Suggestie Chips */}
+      <div className="mt-2 flex flex-wrap gap-2">
+        {suggestions.map((suggestion, idx) => (
+          <button
+            key={idx}
+            type="button"
+            onClick={() => applySuggestion(name, suggestion)}
+            className={chipClass}
+          >
+            <Plus size={12} /> {suggestion}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 pb-20"> 
@@ -211,45 +266,32 @@ export default function AddRecipePage() {
             </div>
           </div>
 
-          {/* Sectie 3: Ouder Tips (NU OOK IN SLATE STIJL) */}
-          {/* We houden de achtergrond amber-50 voor onderscheid, maar de tekst is hard SLATE */}
+          {/* Sectie 3: Ouder Tips (MET SUGGESTIES) */}
           <div className="bg-amber-50 p-6 rounded-2xl border border-amber-200">
             <h2 className="text-xl font-black text-slate-900 mb-2">3. Parents Survival Mode</h2>
-            <p className="text-slate-700 font-bold text-sm mb-6">Wat maakt dit recept geschikt voor Sebas & Janieke? (Dit kan de scraper niet weten!)</p>
+            <p className="text-slate-700 font-bold text-sm mb-6">Wat maakt dit recept geschikt voor Sebas & Janieke?</p>
             
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-800 uppercase mb-1">⚡️ Snelle Variant Tip</label>
-                <input 
-                  name="tipQuickFix" 
-                  value={formData.tipQuickFix} 
-                  onChange={handleChange} 
-                  className={inputClass} 
-                  placeholder="Wat kun je skippen/kopen?" 
-                />
-              </div>
+            <div className="space-y-6">
+              {renderTipField(
+                "⚡️ Snelle Variant Tip",
+                "tipQuickFix",
+                "Wat kun je skippen of kant-en-klaar kopen?",
+                SUGGESTIONS.quickFix
+              )}
 
-              <div>
-                <label className="block text-xs font-bold text-slate-800 uppercase mb-1">😭 Als Bobby huilt...</label>
-                <input 
-                  name="tipBabyCrying" 
-                  value={formData.tipBabyCrying} 
-                  onChange={handleChange} 
-                  className={inputClass}
-                  placeholder="Hoe zet je dit recept op 'pauze'?" 
-                />
-              </div>
+              {renderTipField(
+                "😭 Als Bobby huilt...",
+                "tipBabyCrying",
+                "Hoe zet je dit recept op 'pauze'?",
+                SUGGESTIONS.babyCrying
+              )}
 
-              <div>
-                <label className="block text-xs font-bold text-slate-800 uppercase mb-1">💧 Afwas Hack</label>
-                <input 
-                  name="tipDishwashing" 
-                  value={formData.tipDishwashing} 
-                  onChange={handleChange} 
-                  className={inputClass}
-                  placeholder="Hoe maak je minder vies?" 
-                />
-              </div>
+              {renderTipField(
+                "💧 Afwas Hack",
+                "tipDishwashing",
+                "Hoe maak je minder vies?",
+                SUGGESTIONS.dishwashing
+              )}
             </div>
           </div>
 
