@@ -28,7 +28,7 @@ export default async function JaniekePage() {
   const allTips = [...dynamicTips, ...privateTips.janieke];
 
   return (
-    <AuthGate targetName="janieke" requiredCode="5678">
+    <AuthGate targetName="janieke" requiredCode="6148">
       {/* ACHTERGROND: Lichtgrijs (Slate-50) */}
       <main className="min-h-screen bg-slate-50 pb-20"> 
         

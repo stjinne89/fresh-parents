@@ -28,7 +28,7 @@ export default async function SebasPage() {
   const allTips = [...dynamicTips, ...privateTips.sebas];
 
   return (
-    <AuthGate targetName="sebas" requiredCode="1234">
+    <AuthGate targetName="sebas" requiredCode="2914">
       {/* ACHTERGROND: Lichtgrijs (Slate-50) voor rust en contrast */}
       <main className="min-h-screen bg-slate-50 pb-20"> 
         
