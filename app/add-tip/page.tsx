@@ -12,7 +12,7 @@ export default function AddTipPage() {
   
   const [formData, setFormData] = useState({
     author: '',
-    target: 'public_left', // default
+    target: 'public_random', // default
     title: '', // Alleen nodig voor privé
     message: '',
     emoji: '👋'
