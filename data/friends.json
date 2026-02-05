@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "author": "Ome Henk",
+    "message": "Slaap is voor de zwakken... grapje, pak elke minuut die je pakken kan!",
+    "emoji": "😴",
+    "side": "left"
+  },
+  {
+    "id": 2,
+    "author": "Sophie",
+    "message": "Vergeet niet te eten. Een baby opvoeden op alleen koffie werkt niet (ik heb het geprobeerd).",
+    "emoji": "☕️",
+    "side": "right"
+  },
+  {
+    "id": 3,
+    "author": "Mark & Els",
+    "message": "De was loopt niet weg. Helaas.",
+    "emoji": "🧺",
+    "side": "left"
+  },
+  {
+    "id": 4,
+    "author": "Janieke's Collega's",
+    "message": "Geniet ervan! Voor je het weet vragen ze om de autosleutels.",
+    "emoji": "🚗",
+    "side": "right"
+  }
+]

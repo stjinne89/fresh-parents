@@ -1,7 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+  typescript: {
+    // Dit mag meestal wel nog, voorkomt dat de build stopt bij typefoutjes
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

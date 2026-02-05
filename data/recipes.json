@@ -1,0 +1,73 @@
+[
+  {
+    "id": "pasta-pesto",
+    "title": "Pasta Pesto 'Zombie Mode'",
+    "time": "10 min",
+    "difficulty": "Simpel",
+    "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80",
+    "oneLiner": "Maximale carbs, minimale moeite.",
+    "tags": ["Eén pan", "Comfort food", "Vegetarisch"],
+    "ingredients": [
+      "500g Verse pasta (uit het koelschap, kookt sneller)",
+      "1 potje Pesto (de dure, je verdient het)",
+      "1 zakje Rucola",
+      "Handje Pijnboompitten",
+      "Parmezaanse kaas (geraspt)"
+    ],
+    "steps": [
+      "Zet een pan water op. Voeg zout toe als je eraan denkt.",
+      "Gooi de verse pasta in het kokende water. Dit duurt maar 3-4 minuten.",
+      "Giet af, maar laat een heel klein beetje kookvocht in de pan.",
+      "Roer het hele potje pesto door de pasta.",
+      "Gooi de rucola en pijnboompitten erbij. Klaar."
+    ],
+    "parentTips": {
+      "quickFix": "Geen tijd voor pijnboompitten roosteren? Ze smaken rauw ook prima.",
+      "babyCrying": "Zet het vuur uit en deksel op de pan. De pasta blijft in het hete water nog 10 min goed zonder papperig te worden.",
+      "dishwashing": "Eet direct uit de pan. Scheelt weer twee borden. Wij oordelen niet."
+    }
+  },
+  {
+    "id": "wraps-kip",
+    "title": "Gooi-maar-raak Wraps",
+    "time": "15 min",
+    "difficulty": "Gemiddeld",
+    "image": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800&q=80",
+    "oneLiner": "Eet met één hand, wieg met de andere.",
+    "tags": ["Eiwitrijk", "Kliederboel"],
+    "ingredients": [
+        "4 Wraps",
+        "300g Kipreepjes",
+        "1 Paprika",
+        "Potje Salsa",
+        "Geraspte kaas"
+    ],
+    "steps": [
+        "Snij de paprika (of breek hem in stukken).",
+        "Bak de kipreepjes goudbruin.",
+        "Gooi groente erbij.",
+        "Vul wraps, rol op, eet."
+    ],
+    "parentTips": {
+        "quickFix": "Koop voorgesneden kip en groente. Kost 2 euro meer, scheelt 10 minuten huilen.",
+        "babyCrying": "Zet het vuur laag. Dit prutje kan prima even sudderen.",
+        "dishwashing": "Gebruik papieren bordjes. Echt waar. Doe het gewoon."
+    }
+  },
+  {
+    "id": "traybake",
+    "title": "Luieman's Ovenplaat",
+    "time": "5 min prep",
+    "difficulty": "Simpel",
+    "image": "https://images.unsplash.com/photo-1519624028591-5883c4d5b24d?auto=format&fit=crop&w=800&q=80",
+    "oneLiner": "De oven doet al het werk terwijl jij doucht.",
+    "tags": ["Oven", "Gezond"],
+    "ingredients": ["Aardappeltjes", "Worstjes", "Broccoli"],
+    "steps": ["Oven op 200 graden.", "Alles op de plaat.", "Wacht 20 min."],
+    "parentTips": {
+        "quickFix": "Geen zin om te snijden? Gooi hele krieltjes en mini-worteltjes erop.",
+        "babyCrying": "De oven heeft een timer. Als hij piept en je bent bezig: zet de oven uit en laat de deur dicht. Blijft 30 min warm.",
+        "dishwashing": "Leg bakpapier op de bakplaat. Gooi papier weg. 0% afwas."
+    }
+  }
+]
