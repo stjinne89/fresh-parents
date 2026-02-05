@@ -3,6 +3,7 @@ import FriendNote from '@/components/FriendNote';
 import RecipeCard from '@/components/RecipeCard';
 import { ArrowRight, Plus } from 'lucide-react';
 import { supabase } from '@/utils/supabase'; 
+import React from 'react';
 
 // Types definiëren voor data uit DB
 type Recipe = {
@@ -21,6 +22,8 @@ type Tip = {
   emoji: string;
   target: string;
 };
+
+export const dynamic = 'force-dynamic'; // <--- DEZE REGEL TOEVOEGEN
 
 export default async function Home() {
   // 1. DATA OPHALEN: RECEPTEN

@@ -5,6 +5,8 @@ import AuthGate from '@/components/AuthGate';
 import { supabase } from '@/utils/supabase';
 import { privateTips } from '@/data/privateTips';
 
+export const dynamic = 'force-dynamic'; // <--- DEZE REGEL TOEVOEGEN
+
 export default async function JaniekePage() {
   // 1. Haal data op
   const { data: dbTips } = await supabase
