@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChefHat, Wind, BookOpen, MessageCircle, PenTool, Send } from 'lucide-react';
+import { ChefHat, Wind, BookOpen, MessageCircle, Send } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 
 // Zorgt dat nieuwe berichten/recepten direct zichtbaar zijn
@@ -45,7 +45,8 @@ export default async function Home() {
             <div className="bg-emerald-100 p-2 rounded-lg">
               <ChefHat className="text-emerald-700" size={20} />
             </div>
-            <span className="font-black text-slate-800 tracking-tight hidden xs:block">Fresh Parents</span>
+            {/* HIER STAAT HIJ WEER: Hello Fresh Parents */}
+            <span className="font-black text-slate-800 tracking-tight hidden xs:block">Hello Fresh Parents</span>
           </div>
           <div className="flex gap-2">
             <Link href="/sebas" className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-100 text-xs font-bold uppercase rounded-lg transition-colors">
@@ -71,7 +72,7 @@ export default async function Home() {
         </div>
 
         {/* --- DE ACTIE KNOPPEN (FIX VOOR MOBIEL) --- */}
-        {/* 'flex-col' zorgt dat ze op mobiel onder elkaar staan. 'sm:flex-row' zet ze op tablet/desktop naast elkaar. */}
+        {/* flex-col = onder elkaar op mobiel. sm:flex-row = naast elkaar op pc */}
         <div className="mb-10 flex flex-col sm:flex-row justify-center items-center gap-4">
            
            {/* KNOP 1: Recept */}
@@ -87,7 +88,7 @@ export default async function Home() {
             </span>
           </Link>
 
-          {/* KNOP 2: Berichtje (Toegevoegd!) */}
+          {/* KNOP 2: Berichtje */}
           <Link 
             href="/add-tip"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-slate-700 border-2 border-slate-200 rounded-xl font-bold hover:border-slate-800 hover:text-slate-900 transition-all"
@@ -116,8 +117,6 @@ export default async function Home() {
 
           {/* KOLOM 2: RECEPTEN (MIDDEN) */}
           <div className="flex flex-col gap-6 order-first lg:order-none"> 
-          {/* ^ 'order-first' zorgt dat recepten op mobiel BOVENAAN staan, want dat is het belangrijkst */}
-          
              <div className="flex items-center gap-2 mb-2 px-1 opacity-50">
                <Wind size={14} />
                <span className="text-xs font-black uppercase tracking-widest">Recepten</span>
