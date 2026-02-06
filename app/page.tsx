@@ -1,168 +1,177 @@
-import Link from 'next/link';
-import FriendNote from '@/components/FriendNote';
-import RecipeCard from '@/components/RecipeCard';
-import { ArrowRight, Plus } from 'lucide-react';
-import { supabase } from '@/utils/supabase'; 
 import React from 'react';
+import Link from 'next/link';
+import { ChefHat, Wind, BookOpen, MessageCircle, PenTool, Send } from 'lucide-react';
+import { supabase } from '@/utils/supabase';
 
-// Types definiëren voor data uit DB
-type Recipe = {
-  id: string;
-  title: string;
-  time: string;
-  difficulty: string;
-  image: string;
-  one_liner: string;
-};
-
-type Tip = {
-  id: string; // Supabase ID is string (uuid) of number
-  author: string;
-  message: string;
-  emoji: string;
-  target: string;
-};
-
-export const dynamic = 'force-dynamic'; // <--- DEZE REGEL TOEVOEGEN
+// Zorgt dat nieuwe berichten/recepten direct zichtbaar zijn
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // 1. DATA OPHALEN: RECEPTEN
+  // 1. Haal alle RECEPTEN op
   const { data: recipes } = await supabase
     .from('recipes')
-    .select('id, title, time, difficulty, image, one_liner')
+    .select('*')
     .order('created_at', { ascending: false });
 
-  // 2. DATA OPHALEN: PUBLIEKE TIPS
+  // 2. Haal alle PUBLIEKE TIPS op (links en rechts)
   const { data: tips } = await supabase
     .from('tips')
     .select('*')
-    .in('target', ['public_left', 'public_right'])
+    .in('target', ['public_left', 'public_right']) 
     .order('created_at', { ascending: false });
 
-  // Fallbacks
-  const displayRecipes: Recipe[] = (recipes as Recipe[]) || [];
-  const allTips: Tip[] = (tips as Tip[]) || [];
+  const leftTips = (tips || []).filter(t => t.target === 'public_left');
+  const rightTips = (tips || []).filter(t => t.target === 'public_right');
 
-  // Tips verdelen
-  const leftFriends = allTips.filter(t => t.target === 'public_left');
-  const rightFriends = allTips.filter(t => t.target === 'public_right');
+  const TipCard = ({ tip }: { tip: any }) => (
+    <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 mb-4 break-inside-avoid animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex items-start gap-3">
+        <span className="text-2xl pt-1 filter drop-shadow-sm">{tip.emoji}</span>
+        <div>
+          <h4 className="font-bold text-slate-900 text-sm mb-1">{tip.author}</h4>
+          <p className="text-slate-600 text-sm leading-relaxed italic">"{tip.message}"</p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <main className="min-h-screen bg-slate-50 font-sans">
-      {/* GRID LAYOUT: Desktop (Sidebar - Content - Sidebar) */}
-      <div className="lg:grid lg:grid-cols-[280px_1fr_280px] gap-8 max-w-[1600px] mx-auto">
-        
-        {/* --- LEFT RAIL (Desktop Only) --- */}
-        <aside className="hidden lg:block pt-24 px-4">
-          <div className="sticky top-8 space-y-4">
-            <h3 className="text-slate-400 text-xs font-bold uppercase tracking-widest text-center mb-6">Vriendenmuur</h3>
-            {leftFriends.map((friend) => (
-              <FriendNote key={friend.id} author={friend.author} message={friend.message} emoji={friend.emoji} />
-            ))}
+    <main className="min-h-screen bg-slate-50 font-sans pb-20">
+      
+      {/* HEADER */}
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm/50">
+        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-emerald-100 p-2 rounded-lg">
+              <ChefHat className="text-emerald-700" size={20} />
+            </div>
+            <span className="font-black text-slate-800 tracking-tight hidden xs:block">Fresh Parents</span>
           </div>
-        </aside>
+          <div className="flex gap-2">
+            <Link href="/sebas" className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-100 text-xs font-bold uppercase rounded-lg transition-colors">
+              Sebas
+            </Link>
+            <Link href="/janieke" className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-100 text-xs font-bold uppercase rounded-lg transition-colors">
+              Janieke
+            </Link>
+          </div>
+        </div>
+      </header>
 
-        {/* --- CENTER CONTENT --- */}
-        <div className="pb-20">
-          
-          {/* Header / Nav */}
-          <header className="p-4 flex justify-between items-center mb-8">
-            <div className="text-emerald-600 font-black text-xl tracking-tighter">
-              Hello<span className="text-slate-800">FreshParents!</span>
-            </div>
-            <div className="flex gap-2">
-               <Link href="/sebas" className="text-xs font-bold text-slate-500 hover:text-emerald-600 px-3 py-2 bg-white rounded-full border border-slate-200 transition-colors">
-                 Sebas
-               </Link>
-               <Link href="/janieke" className="text-xs font-bold text-slate-500 hover:text-emerald-600 px-3 py-2 bg-white rounded-full border border-slate-200 transition-colors">
-                 Janieke
-               </Link>
-            </div>
-          </header>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        
+        {/* INTRO */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-3">
+            Survival Gids & <span className="text-emerald-600">Recepten</span>
+          </h1>
+          <p className="text-slate-600 font-medium max-w-lg mx-auto">
+            Voor Sebas & Janieke. Omdat koken met een baby topsport is.
+          </p>
+        </div>
 
-          {/* Hero Section */}
-          <section className="px-4 mb-12 text-center">
-            <span className="inline-block py-1 px-3 rounded-full bg-amber-100 text-amber-700 text-xs font-bold mb-4">
-              ✨ Speciaal voor Bobby's ouders
+        {/* --- DE ACTIE KNOPPEN (FIX VOOR MOBIEL) --- */}
+        {/* 'flex-col' zorgt dat ze op mobiel onder elkaar staan. 'sm:flex-row' zet ze op tablet/desktop naast elkaar. */}
+        <div className="mb-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+           
+           {/* KNOP 1: Recept */}
+           <Link 
+            href="/add-recipe"
+            className="w-full sm:w-auto group relative inline-flex items-center justify-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg shadow-slate-200 hover:scale-105 transition-all"
+          >
+            <BookOpen size={18} />
+            <span>Nieuw Recept</span>
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
-              Snelle happen voor <br/>
-              <span className="text-emerald-600">trage nachten.</span>
-            </h1>
-            <p className="text-slate-500 max-w-lg mx-auto mb-8 text-lg">
-              Geen culinaire hoogstandjes, maar voedzaam overleven. 
-              Want koken met slaapgebrek is topsport.
-            </p>
-            
-            <div className="flex justify-center gap-4">
-              <Link href="#recepten" className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition">
-                Bekijk recepten
-              </Link>
-              <Link href="/add-recipe" className="flex items-center gap-2 bg-white text-emerald-600 border border-emerald-100 px-6 py-3 rounded-xl font-bold shadow-sm hover:bg-emerald-50 transition">
-                <Plus size={18} /> Nieuw Recept
-              </Link>
-            </div>
-          </section>
+          </Link>
 
-          {/* Mobile Friends Carousel (Alleen mobiel) */}
-          <section className="lg:hidden mb-12 overflow-x-auto pb-4 px-4 snap-x flex gap-4 no-scrollbar">
-            {allTips.map((friend) => (
-              <div key={friend.id} className="min-w-[280px] snap-center">
-                 <FriendNote author={friend.author} message={friend.message} emoji={friend.emoji} />
-              </div>
-            ))}
-          </section>
-
-          {/* Recipes Grid */}
-          <section id="recepten" className="px-4">
-             <div className="flex justify-between items-end mb-6">
-                <h2 className="text-2xl font-bold text-slate-800">Populaire gerechten</h2>
-                <span className="text-sm text-emerald-600 font-bold cursor-pointer hover:underline flex items-center gap-1">
-                  Alles bekijken <ArrowRight size={16}/>
-                </span>
-             </div>
-             
-             {displayRecipes.length > 0 ? (
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 {displayRecipes.map((recipe) => (
-                   <Link key={recipe.id} href={`/recipe/${recipe.id}`} className="block group">
-                      <RecipeCard 
-                        title={recipe.title}
-                        time={recipe.time}
-                        difficulty={recipe.difficulty}
-                        image={recipe.image}
-                        oneLiner={recipe.one_liner} 
-                      />
-                   </Link>
-                 ))}
-               </div>
-             ) : (
-               <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-                 <p className="text-slate-400 mb-4">Nog geen recepten gevonden...</p>
-                 <Link href="/add-recipe" className="inline-flex items-center gap-2 text-emerald-600 font-bold hover:underline">
-                   <Plus size={18} /> Voeg de eerste toe!
-                 </Link>
-               </div>
-             )}
-          </section>
+          {/* KNOP 2: Berichtje (Toegevoegd!) */}
+          <Link 
+            href="/add-tip"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-slate-700 border-2 border-slate-200 rounded-xl font-bold hover:border-slate-800 hover:text-slate-900 transition-all"
+          >
+            <Send size={18} />
+            <span>Berichtje Achterlaten</span>
+          </Link>
 
         </div>
 
-        {/* --- RIGHT RAIL (Desktop Only) --- */}
-        <aside className="hidden lg:block pt-32 px-4">
-           <div className="sticky top-8 space-y-4">
-            {rightFriends.map((friend) => (
-              <FriendNote key={friend.id} author={friend.author} message={friend.message} emoji={friend.emoji} />
-            ))}
-             <div className="bg-amber-50 p-4 rounded-xl text-center border border-amber-100 mt-8">
-               <p className="text-sm text-amber-800 font-bold mb-2">Heb jij ook een tip?</p>
-               <Link href="/add-tip" className="inline-block text-xs bg-white text-amber-700 border border-amber-200 px-3 py-2 rounded shadow-sm hover:bg-amber-100 transition">
-                 Stuur berichtje
-               </Link>
-             </div>
-           </div>
-        </aside>
+        {/* --- DE MASONRY GRID (3 KOLOMMEN) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-start">
 
+          {/* KOLOM 1: TIPS LINKS */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2 mb-2 px-1 opacity-50">
+               <MessageCircle size={14} />
+               <span className="text-xs font-black uppercase tracking-widest">Support Links</span>
+            </div>
+            {leftTips.map((tip) => (
+              <TipCard key={tip.id} tip={tip} />
+            ))}
+             {/* Fallback als er niks is */}
+            {leftTips.length === 0 && <div className="hidden lg:block text-center text-slate-300 text-sm py-10 italic">Nog stil hier...</div>}
+          </div>
+
+          {/* KOLOM 2: RECEPTEN (MIDDEN) */}
+          <div className="flex flex-col gap-6 order-first lg:order-none"> 
+          {/* ^ 'order-first' zorgt dat recepten op mobiel BOVENAAN staan, want dat is het belangrijkst */}
+          
+             <div className="flex items-center gap-2 mb-2 px-1 opacity-50">
+               <Wind size={14} />
+               <span className="text-xs font-black uppercase tracking-widest">Recepten</span>
+            </div>
+            
+            {(recipes || []).map((recipe: any) => (
+              <Link href={`/recipe/${recipe.id}`} key={recipe.id} className="block group">
+                <article className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-md hover:border-emerald-500 transition-all">
+                  <div className="relative h-48 overflow-hidden bg-slate-100">
+                    {recipe.image ? (
+                      <img 
+                        src={recipe.image} 
+                        alt={recipe.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-slate-300"><ChefHat size={40}/></div>
+                    )}
+                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-slate-900 shadow-sm border border-slate-100 flex items-center gap-1">
+                      ⏱ {recipe.time}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-emerald-700 transition-colors">
+                      {recipe.title}
+                    </h3>
+                    <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">
+                      {recipe.one_liner}
+                    </p>
+                  </div>
+                </article>
+              </Link>
+            ))}
+
+            {(!recipes || recipes.length === 0) && (
+              <div className="text-center p-10 bg-white rounded-2xl border border-dashed border-slate-300">
+                <p className="text-slate-400 font-medium">Nog geen recepten...</p>
+              </div>
+            )}
+          </div>
+
+          {/* KOLOM 3: TIPS RECHTS */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2 mb-2 px-1 opacity-50">
+               <MessageCircle size={14} />
+               <span className="text-xs font-black uppercase tracking-widest">Support Rechts</span>
+            </div>
+            {rightTips.map((tip) => (
+              <TipCard key={tip.id} tip={tip} />
+            ))}
+             {rightTips.length === 0 && <div className="hidden lg:block text-center text-slate-300 text-sm py-10 italic">Nog stil hier...</div>}
+          </div>
+
+        </div>
       </div>
     </main>
   );
