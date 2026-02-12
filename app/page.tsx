@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChefHat, Wind, BookOpen, MessageCircle, Send } from 'lucide-react';
+import { ChefHat, Wind, BookOpen, MessageCircle, Send, User } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 
 // Zorgt dat nieuwe berichten/recepten direct zichtbaar zijn
@@ -24,7 +24,7 @@ export default async function Home() {
   const rightTips = (tips || []).filter(t => t.target === 'public_right');
 
   const TipCard = ({ tip }: { tip: any }) => (
-    <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 mb-4 break-inside-avoid animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 mb-4 break-inside-avoid">
       <div className="flex items-start gap-3">
         <span className="text-2xl pt-1 filter drop-shadow-sm">{tip.emoji}</span>
         <div>
@@ -41,12 +41,20 @@ export default async function Home() {
       {/* HEADER */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm/50">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-emerald-100 p-2 rounded-lg">
-              <ChefHat className="text-emerald-700" size={20} />
+          <div className="flex items-center gap-3">
+             {/* JOUW LOGO (Toegevoegd!) */}
+             <div className="h-10 w-auto flex items-center justify-center">
+               <img 
+                src="/images/hellofreshparents_logo.png" 
+                alt="Fresh Parents Logo" 
+                className="h-full w-auto object-contain"
+                style={{ maxWidth: '140px' }}
+              />
             </div>
-            {/* HIER STAAT HIJ WEER: Hello Fresh Parents */}
-            <span className="font-black text-slate-800 tracking-tight hidden xs:block">Hello Fresh Parents</span>
+            {/* Tekst 'Hello Fresh Parents' verbergen op mobiel om ruimte te maken voor logo */}
+            <span className="font-black text-slate-800 tracking-tight hidden sm:block">
+              Hello Fresh Parents
+            </span>
           </div>
           <div className="flex gap-2">
             <Link href="/sebas" className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-100 text-xs font-bold uppercase rounded-lg transition-colors">
@@ -71,11 +79,9 @@ export default async function Home() {
           </p>
         </div>
 
-        {/* --- DE ACTIE KNOPPEN (FIX VOOR MOBIEL) --- */}
-        {/* flex-col = onder elkaar op mobiel. sm:flex-row = naast elkaar op pc */}
+        {/* KNOPPEN */}
         <div className="mb-10 flex flex-col sm:flex-row justify-center items-center gap-4">
            
-           {/* KNOP 1: Recept */}
            <Link 
             href="/add-recipe"
             className="w-full sm:w-auto group relative inline-flex items-center justify-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg shadow-slate-200 hover:scale-105 transition-all"
@@ -88,7 +94,6 @@ export default async function Home() {
             </span>
           </Link>
 
-          {/* KNOP 2: Berichtje */}
           <Link 
             href="/add-tip"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-slate-700 border-2 border-slate-200 rounded-xl font-bold hover:border-slate-800 hover:text-slate-900 transition-all"
@@ -99,7 +104,8 @@ export default async function Home() {
 
         </div>
 
-        {/* --- DE MASONRY GRID (3 KOLOMMEN) --- */}
+        {/* --- DE LAYOUT (Zoals online) --- */}
+        {/* Hier staat nu lg:grid-cols-3, wat jij mooi vond op de live site */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-start">
 
           {/* KOLOM 1: TIPS LINKS */}
@@ -111,11 +117,11 @@ export default async function Home() {
             {leftTips.map((tip) => (
               <TipCard key={tip.id} tip={tip} />
             ))}
-             {/* Fallback als er niks is */}
-            {leftTips.length === 0 && <div className="hidden lg:block text-center text-slate-300 text-sm py-10 italic">Nog stil hier...</div>}
+             {leftTips.length === 0 && <div className="hidden lg:block text-center text-slate-300 text-sm py-10 italic">Nog stil hier...</div>}
           </div>
 
           {/* KOLOM 2: RECEPTEN (MIDDEN) */}
+          {/* 'lg:order-none' zorgt dat het op desktop in het midden staat */}
           <div className="flex flex-col gap-6 order-first lg:order-none"> 
              <div className="flex items-center gap-2 mb-2 px-1 opacity-50">
                <Wind size={14} />
@@ -140,6 +146,13 @@ export default async function Home() {
                     </div>
                   </div>
                   <div className="p-5">
+                    {/* NAAM VAN DE MAKER (Toegevoegd!) */}
+                    {recipe.author && (
+                      <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 uppercase mb-2 tracking-wide">
+                        <User size={12} /> {recipe.author}
+                      </div>
+                    )}
+
                     <h3 className="font-bold text-lg text-slate-900 mb-1 group-hover:text-emerald-700 transition-colors">
                       {recipe.title}
                     </h3>
